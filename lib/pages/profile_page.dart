@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:esearchplayers/data/user_data.dart';
+import 'package:esearchplayers/services/cloud_storage.dart';
+import 'package:esearchplayers/services/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,6 +15,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool isEditing = false;
+  String _imageUrl = '';
+  File? _imageUpload;
+  UserData? user;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +28,41 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         body: Column(
           children: [
-            const Expanded(
-              flex: 1,
-              child: Icon(Icons.person, size: 100),
-            ),
+            Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FutureBuilder(
+                      future: futureUserData,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          _imageUrl = snapshot.data.profileImageUrl;
+                        }
+                        return CircleAvatar(
+                          radius: 60,
+                          backgroundImage: _imageUrl.isNotEmpty
+                              ? NetworkImage(_imageUrl)
+                              : null,
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        // obtén el usuario actual
+                        final imageFile = await pickImage();
+                        if (imageFile == null) return;
+                        _imageUpload = File(imageFile.path);
+                        await uploadImage(_imageUpload!);
+                        setState(() {
+                          _imageUrl = imageFile.path;
+                        });
+                      },
+                      child: const Text('Pick Image'),
+                    ),
+                  ],
+                )),
             Expanded(
               flex: 3,
               child: Container(
@@ -76,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor),
-                        onPressed: () => print("SAVE"),
+                        onPressed: () => print("CANCEL"),
                         child: const Text("Cancel")),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -88,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             );
           } else {
-            return const Text("Loading...");
+            return const Center(child: CircularProgressIndicator());
           }
         });
   }

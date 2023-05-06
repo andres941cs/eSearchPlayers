@@ -46,6 +46,8 @@ class _RegisterPageState extends State<RegisterPage> {
       "username": username,
       "email": emailController.text,
       "tag": tag,
+      "search": false,
+      "guild": false,
     });
   }
 

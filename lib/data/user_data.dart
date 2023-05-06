@@ -27,6 +27,7 @@ Future<UserData> getUserData(email) async {
     username: querySnapshot.docs[0].get('username'),
     email: querySnapshot.docs[0].get('email'),
     tag: querySnapshot.docs[0].get('tag'),
+    profileImageUrl: querySnapshot.docs[0].get('profileImageUrl'),
   );
   return userData;
 }
@@ -35,11 +36,13 @@ class UserData {
   final String username;
   final String email;
   final String tag;
+  final String? profileImageUrl;
 
   UserData({
     required this.username,
     required this.email,
     required this.tag,
+    this.profileImageUrl,
   });
 
   factory UserData.fromDocument(DocumentSnapshot doc) {
@@ -47,8 +50,15 @@ class UserData {
       username: doc['username'],
       email: doc['email'],
       tag: doc['tag'],
+      profileImageUrl: doc['profileImageUrl'],
     );
   }
+
+  UserData.fromMap(Map<String, dynamic> map)
+      : username = map['name'],
+        email = map['email'],
+        tag = map['tag'],
+        profileImageUrl = map['profileImageUrl'];
 }
 
 // Un metodo que actualiza el booleano de un usuario
