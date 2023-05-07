@@ -85,11 +85,14 @@ class _GuildPageState extends State<GuildPage> {
                 title: Text(document['name']),
                 subtitle: Text(document['description']),
                 trailing: Text('${document['members'].length} /30'),
-                onTap: () => showDialog(
-                    context: context,
-                    builder: (_) => MyAlertDialog(
-                          guildName: document['name'],
-                        )),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => MyAlertDialog(
+                            guildName: document['name'],
+                          ));
+                  //document['name']
+                },
               ),
             );
           }).toList(),

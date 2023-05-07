@@ -1,5 +1,7 @@
+import 'package:esearchplayers/data/user_data.dart';
 import 'package:esearchplayers/pages/guild_page.dart';
 import 'package:esearchplayers/pages/my_guild.dart';
+import 'package:esearchplayers/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

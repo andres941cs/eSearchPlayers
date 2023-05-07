@@ -1,4 +1,3 @@
-import 'package:esearchplayers/pages/guild_page.dart';
 import 'package:esearchplayers/pages/guild_home_page.dart';
 import 'package:esearchplayers/pages/home_page.dart';
 import 'package:esearchplayers/pages/profile_page.dart';

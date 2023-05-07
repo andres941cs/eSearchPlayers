@@ -1,3 +1,4 @@
+import 'package:esearchplayers/pages/my_guild.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,16 +20,19 @@ class MyAlertDialog extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Cancel')),
         CupertinoDialogAction(
-            onPressed: () {
-              _addUserToClan(guildName!);
-              Navigator.of(context).pop();
+            onPressed: () async {
+              _addUserToClan(guildName!).then((value) {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => MyGuildPage()));
+              });
             },
             child: const Text('Join'))
       ],
     );
   }
 
-  void _addUserToClan(String clanId) async {
+  Future<void> _addUserToClan(String clanId) async {
     final userId = user!.email;
     final querySnapshot = await FirebaseFirestore.instance
         .collection('guilds')
@@ -40,5 +44,14 @@ class MyAlertDialog extends StatelessWidget {
       'members': FieldValue.arrayUnion([userId])
     });
     //Peniente cambiar el booleano de guilds a true
+
+    final querySnapshot2 = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: user?.email)
+        .get();
+    final userRef = querySnapshot2.docs.first.reference;
+    //await userRef.update({'guild': true});
+    await userRef
+        .set({'guild': true, 'guildName': guildName}, SetOptions(merge: true));
   }
 }

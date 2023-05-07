@@ -32,6 +32,14 @@ Future<UserData> getUserData(email) async {
   return userData;
 }
 
+Future<String> getUserClanName(email) async {
+  QuerySnapshot querySnapshot =
+      await db.collection('users').where('email', isEqualTo: email).get();
+  //if (querySnapshot.docs.isNotEmpty) {}
+  String clanName = querySnapshot.docs[0].get('guildName');
+  return clanName;
+}
+
 class UserData {
   final String username;
   final String email;
