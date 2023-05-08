@@ -2,6 +2,7 @@ import 'package:esearchplayers/data/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/retry.dart';
 
 class MyPlayerList extends StatefulWidget {
   const MyPlayerList({super.key});
@@ -17,9 +18,8 @@ class _MyPlayerListState extends State<MyPlayerList> {
   String _nameButton = 'Search';
   bool _searching = false;
   Map<String, dynamic> _myData = {};
-  List<UserData> myTeam = [
-    UserData(username: 'Loading...', email: 'Loading...', tag: 'Loading...')
-  ];
+  List<UserData> myTeam = [];
+  //UserData(username: 'Loading...', email: 'Loading...', tag: 'Loading...'),
   List<String> namePlayers = [];
   void _loadData() async {
     // Aquí puede agregar código para cargar los datos del equipo.
@@ -64,33 +64,42 @@ class _MyPlayerListState extends State<MyPlayerList> {
           color: Colors.red,
           child: ListTile(
               leading: const Icon(Icons.person, size: 50.0),
-              title: Text('Name: ${myTeam[0].username}'),
-              subtitle: Text('Tag: ${myTeam[0].tag}'),
+              title: Text(
+                  'Name: ${myTeam.isNotEmpty ? myTeam[0].username : 'Loading...'}'),
+              subtitle: Text(
+                  'Tag:  ${myTeam.isNotEmpty ? myTeam[0].tag : 'Loading...'}'),
               trailing: _icon)),
       Card(
           color: Colors.red,
           child: ListTile(
               leading: const Icon(Icons.person, size: 50.0),
-              title: Text('Name: $_name'),
-              subtitle: Text('Tag: $_tag'),
+              title: Text(
+                  'Name: ${myTeam.length > 1 ? myTeam[1].username : 'Loading...'}'),
+              subtitle: Text(
+                  'Tag:  ${myTeam.length > 1 ? myTeam[1].tag : 'Loading...'}'),
               trailing: _icon)),
       Card(
           color: Colors.red,
           child: ListTile(
               leading: const Icon(Icons.person, size: 50.0),
-              title: Text('Name: $_name'),
-              subtitle: Text('Tag: $_tag'),
+              title: Text(
+                  'Name: ${myTeam.length > 2 ? myTeam[2].username : 'Loading...'}'),
+              subtitle: Text(
+                  'Tag:  ${myTeam.length > 2 ? myTeam[2].tag : 'Loading...'}'),
               trailing: _icon)),
       Card(
           color: Colors.red,
           child: ListTile(
               leading: const Icon(Icons.person, size: 50.0),
-              title: Text('Name: $_name'),
-              subtitle: Text('Tag: $_tag'),
+              title: Text(
+                  'Name: ${myTeam.length > 3 ? myTeam[3].username : 'Loading...'}'),
+              subtitle: Text(
+                  'Tag:  ${myTeam.length > 3 ? myTeam[3].tag : 'Loading...'}'),
               trailing: _icon)),
       ElevatedButton(
           onPressed: () {
-            searchPlayer();
+            isTeamCreated().then((value) => showTeamCreated(value));
+
             setState(() {
               _icon = const CircularProgressIndicator();
             });
@@ -107,7 +116,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
         .collection('users')
         .where('search', isEqualTo: true)
         .where('email', isNotEqualTo: _myData['email'])
-        .limit(1)
+        .limit(4)
         .get(); //Modificar - Al final buscara a 4 jugadores
     //List<UserData> listUsers = [];
     if (querySnapshot.docs.isEmpty) {
@@ -137,6 +146,59 @@ class _MyPlayerListState extends State<MyPlayerList> {
       }
       namePlayers.add(_myData['email']);
       createTeam(namePlayers);
+    }
+  }
+
+  Future<List<dynamic>?> isTeamCreated() async {
+    //Para saber si el equipo ya fue creado
+    db = FirebaseFirestore.instance;
+    QuerySnapshot querySnapshot = await db
+        .collection('teams')
+        .where('players', arrayContains: _myData['email'])
+        .limit(1)
+        .get();
+    if (querySnapshot.docs.isEmpty) {
+      //print('No hay equipos creados');
+      return null;
+    } else {
+      List<dynamic> teamPlayersC = querySnapshot.docs.first.get(('players'));
+      return teamPlayersC;
+    }
+  }
+
+  void showTeamCreated(List<dynamic>? teamCreate) async {
+    //List<dynamic>? teamPlayers = await isTeamCreated();
+    if (teamCreate == null) {
+      //Se crear el equipo
+      searchPlayer();
+    } else {
+      //Se muestra el equipo
+      print(myTeam);
+      myTeam.clear();
+      teamCreate.forEach((element) async {
+        print(_myData['email']);
+        if (element != _myData['email']) {
+          db = FirebaseFirestore.instance;
+          QuerySnapshot querySnapshot = await db
+              .collection('users')
+              .where('email', isEqualTo: element)
+              .limit(1)
+              .get();
+          final doc = querySnapshot.docs[0];
+          final user = UserData.fromDocument(doc);
+          setState(() {
+            myTeam.add(user); //querySnapshot.docs[i].data()
+          });
+          print(user.username);
+        }
+      });
+
+      print(myTeam);
+      /*
+      setState(() {
+        myTeam.add(user); //querySnapshot.docs[i].data()
+      });
+      */
     }
   }
 
