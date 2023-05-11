@@ -6,6 +6,7 @@ import 'package:esearchplayers/pages/guild_home_page.dart';
 import 'package:esearchplayers/pages/guild_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyGuildPage extends StatefulWidget {
   const MyGuildPage({super.key});
@@ -68,6 +69,7 @@ class _MyGuildPageState extends State<MyGuildPage> {
                   Center(
                     child: Text(
                       guild?.name ?? 'Loading...',
+                      style: GoogleFonts.getFont('Righteous'),
                     ),
                   ),
                   Row(
@@ -78,16 +80,17 @@ class _MyGuildPageState extends State<MyGuildPage> {
                           const SizedBox(height: 16),
                           Text(
                             'Description',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style:
+                                GoogleFonts.getFont('Righteous', fontSize: 20),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             guild?.description ?? 'Loading...',
-                            style: const TextStyle(fontSize: 16),
+                            style: GoogleFonts.getFont('Ubuntu', fontSize: 16),
                           ),
                         ],
                       ),
-                      Icon(Icons.shield, color: Colors.white)
+                      const Icon(Icons.shield, color: Colors.white)
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -99,13 +102,15 @@ class _MyGuildPageState extends State<MyGuildPage> {
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       ElevatedButton(
-                          onPressed: () => leaveGuild(), child: Text('Leave'))
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red),
+                          onPressed: () => leaveGuild(),
+                          child: Text('Leave'))
                     ],
                   ),
                 ],
               ),
             ),
-            //const SizedBox(height: 8),
             Expanded(
               child: guild == null
                   ? const Center(child: CircularProgressIndicator())

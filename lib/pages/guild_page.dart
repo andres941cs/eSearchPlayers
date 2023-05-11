@@ -3,6 +3,7 @@ import 'package:esearchplayers/components/my_form_guild.dart';
 import 'package:esearchplayers/pages/my_guild.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class GuildPage extends StatefulWidget {
   const GuildPage({super.key});
@@ -18,13 +19,14 @@ class _GuildPageState extends State<GuildPage> {
       appBar: AppBar(
           title: const Text("Guild"),
           backgroundColor: Theme.of(context).primaryColor),
+      backgroundColor: Color.fromRGBO(52, 53, 65, 1),
       body: Column(children: [
-        const Expanded(
+        Expanded(
             flex: 2,
             child: Center(
                 child: Text(
               "List Of Guilds",
-              style: TextStyle(fontFamily: 'Courier', fontSize: 30),
+              style: GoogleFonts.getFont('Righteous', fontSize: 30),
             ))),
         Expanded(
             flex: 8,

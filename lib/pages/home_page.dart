@@ -1,4 +1,5 @@
 import 'package:esearchplayers/components/my_drawer.dart';
+import 'package:esearchplayers/data/api_data.dart';
 import 'package:esearchplayers/data/get_user_data.dart';
 import 'package:esearchplayers/data/user_data.dart';
 import 'package:esearchplayers/pages/login_or_register_page.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> _myData = {};
+  List<Character>? _myDataList = [];
   String myRank = '';
   void logoutUser() {
     FirebaseAuth.instance.signOut();
@@ -27,6 +29,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getUserProfile();
+    getCharactersList().then((value) => setState(() {
+          _myDataList = value;
+        }));
     super.initState();
   }
 
@@ -34,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Home Page'),
+          title: const Text('Home'),
           backgroundColor: Theme.of(context).primaryColor,
           actions: [
             IconButton(
@@ -44,6 +49,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         drawer: const MyDrawer(),
+        backgroundColor: Color.fromRGBO(52, 53, 65, 1),
         body: Column(
           children: [
             Expanded(
@@ -52,18 +58,36 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               flex: 2,
-              child: Container(
-                color: Colors.blue,
-                child: ElevatedButton(
-                    onPressed: getRankGame, child: Text('Get Rank')),
+              child: Card(
+                color: Colors.red,
+                child: _myDataList == null
+                    ? CircularProgressIndicator()
+                    : DataTable(
+                        columns: [
+                          DataColumn(label: Text('Name')),
+                          DataColumn(label: Text('Role')),
+                          //DataColumn(label: Text('Pick Rate')),
+                          DataColumn(label: Text('Win Rate')),
+                        ],
+                        rows: _myDataList!
+                            .map((data) => DataRow(cells: [
+                                  DataCell(Text(data.name)),
+                                  DataCell(Text(data.role)),
+                                  DataCell(Text(data.winRate)),
+                                ]))
+                            .toList(),
+                      ),
+
                 // contenido de la segunda columna
               ),
             ),
             Expanded(
               flex: 3,
               child: Container(
-                // contenido de la tercera columna
-                color: Colors.green,
+                decoration: BoxDecoration(
+                    color: Colors.red, borderRadius: BorderRadius.circular(10)),
+                padding: const EdgeInsets.all(5),
+                child: Image.asset('lib/images/mapa_ascend.png'),
               ),
             ),
           ],
@@ -96,7 +120,7 @@ class _HomePageState extends State<HomePage> {
   Widget headerHome() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+          color: Colors.red, borderRadius: BorderRadius.circular(10)),
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       child: Row(
@@ -104,7 +128,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Column(
             children: [
-              const Text('Rango Game: '),
+              Text('Rango Game: ', style: TextStyle(color: Colors.grey[200])),
               SizedBox(
                 height: 40,
                 width: 40,
@@ -153,9 +177,6 @@ class _HomePageState extends State<HomePage> {
         }).catchError((error) {
           print('Error al actualizar los datos: $error');
         });
-      } else {
-        print(
-            'No se encontró ningún documento o se encontró más de un documento con el correo electrónico $user!.email');
       }
     }
   }

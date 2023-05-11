@@ -1,6 +1,7 @@
 import 'package:esearchplayers/components/my_drawer.dart';
 import 'package:esearchplayers/components/my_player_list.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TeamPage extends StatefulWidget {
   const TeamPage({super.key});
@@ -17,15 +18,31 @@ class _TeamPageState extends State<TeamPage> {
             title: const Text("Team"),
             backgroundColor: Theme.of(context).primaryColor),
         drawer: const MyDrawer(),
+        backgroundColor: Color.fromRGBO(52, 53, 65, 1),
         body: Column(
           children: [
-            const Expanded(
+            Expanded(
               flex: 1,
-              child: Text("Team Page"),
+              child: Column(
+                children: [
+                  Text(
+                    "Team Page",
+                    style: GoogleFonts.getFont('Righteous'),
+                  ),
+                  Text(
+                    "On this page, you can search for companions to play games, but remember that you must respect the rules of behavior",
+                    style: GoogleFonts.getFont('Righteous'),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               flex: 3,
-              child: Container(color: Colors.blue, child: const MyPlayerList()),
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const MyPlayerList()),
             ),
           ],
         ));

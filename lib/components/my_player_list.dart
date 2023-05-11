@@ -22,20 +22,22 @@ class _MyPlayerListState extends State<MyPlayerList> {
   //UserData(username: 'Loading...', email: 'Loading...', tag: 'Loading...'),
   List<String> namePlayers = [];
   void _loadData() async {
-    // Aquí puede agregar código para cargar los datos del equipo.
-    // En este ejemplo, simplemente simularemos una carga de datos de 2 segundos
     if (_nameButton == 'Search') {
       _nameButton = 'Cancel';
       _searching = true;
-      updateSearching("user@gmail.com", _searching);
-    } else {
+      updateSearching(_myData['email'], _searching);
+      isTeamCreated().then((value) => showTeamCreated(value));
+    } else if (_nameButton == 'Cancel') {
       _nameButton = 'Search';
       _searching = false;
-      updateSearching("user@gmail.com", _searching);
+      updateSearching(_myData['email'], _searching);
+    } else {
+      //En caso de que el boton sea 'Finalizar equipo'
+      deleteTeam();
+      _nameButton = 'Search';
+      myTeam.clear();
+      //Pediente actualizar el icono
     }
-
-    await Future.delayed(const Duration(seconds: 10));
-
     setState(() {
       _name = 'My Team';
       _tag = '#1234';
@@ -97,13 +99,15 @@ class _MyPlayerListState extends State<MyPlayerList> {
                   'Tag:  ${myTeam.length > 3 ? myTeam[3].tag : 'Loading...'}'),
               trailing: _icon)),
       ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red, // background
+            foregroundColor: Colors.white, // foreground
+          ),
           onPressed: () {
-            isTeamCreated().then((value) => showTeamCreated(value));
-
             setState(() {
               _icon = const CircularProgressIndicator();
             });
-            //_loadData();
+            _loadData();
             //getUserProfile();
           },
           child: Text(_nameButton))
@@ -117,14 +121,14 @@ class _MyPlayerListState extends State<MyPlayerList> {
         .where('search', isEqualTo: true)
         .where('email', isNotEqualTo: _myData['email'])
         .limit(4)
-        .get(); //Modificar - Al final buscara a 4 jugadores
-    //List<UserData> listUsers = [];
-    if (querySnapshot.docs.isEmpty) {
+        .get(); //Modificar - Que filtre por rango
+    if (querySnapshot.docs.isEmpty || querySnapshot.docs.length < 4) {
       print('No hay jugadores buscando equipo');
+      //El booleano para que siga buscando
+      //await Future.delayed(const Duration(seconds: 10)); Esto es como un sleep
     } else {
       myTeam.clear();
       for (int i = 0; i < querySnapshot.docs.length; i++) {
-        print(querySnapshot.docs[i].data());
         var data = querySnapshot.docs[i].data();
         if (data is Map<String, dynamic>) {
           Map<String, dynamic> myData = data;
@@ -133,19 +137,20 @@ class _MyPlayerListState extends State<MyPlayerList> {
             tag: myData['tag'],
             email: myData['email'],
           );
-          // Haz lo que necesites con myData
-
           setState(() {
-            myTeam.add(user); //querySnapshot.docs[i].data()
+            myTeam.add(user);
           });
+          //Agrega el email del jugador al equipo
           namePlayers.add(myData['email']);
-          //print(myTeam[0].username);
         }
-
-        //createTeam(teamPlayers);
       }
-      namePlayers.add(_myData['email']);
+      namePlayers.add(_myData['email']); //Agrega el email del creador al equipo
+      //Actualiza el booleano al crear un equipo
+      updateSearching(_myData['email'], false);
       createTeam(namePlayers);
+      setState(() {
+        _nameButton = 'Finish';
+      });
     }
   }
 
@@ -176,7 +181,6 @@ class _MyPlayerListState extends State<MyPlayerList> {
       print(myTeam);
       myTeam.clear();
       teamCreate.forEach((element) async {
-        print(_myData['email']);
         if (element != _myData['email']) {
           db = FirebaseFirestore.instance;
           QuerySnapshot querySnapshot = await db
@@ -187,18 +191,15 @@ class _MyPlayerListState extends State<MyPlayerList> {
           final doc = querySnapshot.docs[0];
           final user = UserData.fromDocument(doc);
           setState(() {
-            myTeam.add(user); //querySnapshot.docs[i].data()
+            myTeam.add(user);
           });
-          print(user.username);
         }
       });
-
-      print(myTeam);
-      /*
+      //Actualiza el booleano al encontrar equipo
+      updateSearching(_myData['email'], false);
       setState(() {
-        myTeam.add(user); //querySnapshot.docs[i].data()
+        _nameButton = 'Finish';
       });
-      */
     }
   }
 
@@ -229,5 +230,14 @@ class _MyPlayerListState extends State<MyPlayerList> {
     final teamsCollection = FirebaseFirestore.instance.collection('teams');
     // Crea un nuevo documento en la colección y guarda los valores del clan.
     teamsCollection.add({'players': namePlayers});
+  }
+
+  void deleteTeam() async {
+    final teamsCollection = FirebaseFirestore.instance.collection('teams');
+    QuerySnapshot querySnapshot = await teamsCollection
+        .where('players', arrayContains: _myData['email'])
+        .limit(1)
+        .get();
+    querySnapshot.docs.first.reference.delete();
   }
 }

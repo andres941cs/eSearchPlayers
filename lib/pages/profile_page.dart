@@ -26,11 +26,12 @@ class _ProfilePageState extends State<ProfilePage> {
           title: const Text("Profile"),
           backgroundColor: Theme.of(context).primaryColor,
         ),
+        backgroundColor: const Color.fromRGBO(52, 53, 65, 1),
         body: Column(
           children: [
             Expanded(
-                flex: 1,
-                child: Row(
+                flex: 2,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     FutureBuilder(
@@ -49,6 +50,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Colors.white),
                       onPressed: () async {
                         // obtén el usuario actual
                         final imageFile = await pickImage();
@@ -66,7 +70,6 @@ class _ProfilePageState extends State<ProfilePage> {
             Expanded(
               flex: 3,
               child: Container(
-                color: Colors.grey,
                 child: columnWidget(),
               ),
             )
