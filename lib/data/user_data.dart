@@ -82,3 +82,11 @@ Future<void> updateSearching(email, boolValue) async {
               }
           });
 }
+
+Future<String> getUserID(email) async {
+  QuerySnapshot querySnapshot =
+      await db.collection('users').where('email', isEqualTo: email).get();
+  //if (querySnapshot.docs.isNotEmpty) {}
+  String userID = querySnapshot.docs[0].id;
+  return userID;
+}

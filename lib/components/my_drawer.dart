@@ -1,6 +1,8 @@
 import 'package:esearchplayers/pages/guild_home_page.dart';
 import 'package:esearchplayers/pages/home_page.dart';
+import 'package:esearchplayers/pages/messages_page.dart';
 import 'package:esearchplayers/pages/profile_page.dart';
+import 'package:esearchplayers/pages/settings_page.dart';
 import 'package:esearchplayers/pages/team_page.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +61,10 @@ class MyDrawer extends StatelessWidget {
             leading: const Icon(Icons.message),
             title: const Text('Messages'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MessagesPage()));
             },
           ),
           ListTile(
@@ -74,7 +79,10 @@ class MyDrawer extends StatelessWidget {
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SettingsPage()));
             },
           ),
         ],

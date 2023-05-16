@@ -28,9 +28,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
     try {
       if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
-        addUserDetails(usernameController.text, tagController.text);
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: emailController.text, password: passwordController.text);
+        await addUserDetails(userCredential.user!.uid, usernameController.text,
+            tagController.text);
       } else {
         showErrorMessage("Passwords do not match");
       }
@@ -41,13 +43,15 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  void addUserDetails(String username, String tag) async {
-    await FirebaseFirestore.instance.collection("users").add({
+  Future<void> addUserDetails(
+      String userId, String username, String tag) async {
+    await FirebaseFirestore.instance.collection("users").doc(userId).set({
       "username": username,
       "email": emailController.text,
       "tag": tag,
       "search": false,
       "guild": false,
+      "profileImageUrl": ''
     });
   }
 

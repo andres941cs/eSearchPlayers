@@ -1,8 +1,10 @@
+import 'package:esearchplayers/components/my_dialog_eval.dart';
 import 'package:esearchplayers/data/user_data.dart';
+import 'package:esearchplayers/pages/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/retry.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyPlayerList extends StatefulWidget {
   const MyPlayerList({super.key});
@@ -14,7 +16,7 @@ class MyPlayerList extends StatefulWidget {
 class _MyPlayerListState extends State<MyPlayerList> {
   String _name = 'Loading...';
   String _tag = 'Loading...';
-  Widget _icon = const Icon(Icons.more_vert);
+  Widget _icon = const Icon(Icons.search);
   String _nameButton = 'Search';
   bool _searching = false;
   Map<String, dynamic> _myData = {};
@@ -41,7 +43,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
     setState(() {
       _name = 'My Team';
       _tag = '#1234';
-      _icon = const Icon(Icons.check);
+      //_icon = myMenu(myTeam[0]); //check
     });
   }
 
@@ -57,29 +59,33 @@ class _MyPlayerListState extends State<MyPlayerList> {
       Card(
           color: Colors.red,
           child: ListTile(
-              leading: const Icon(Icons.person, size: 50.0),
-              title: Text(
-                  'Name: ${_myData['username']}'), //"Name: $_myData['username']"
-              subtitle: Text('Tag: ${_myData['tag']}'),
-              trailing: _icon)),
+            leading: const Icon(Icons.person, size: 50.0, color: Colors.black),
+            title: Text('Name: ${_myData['username']}',
+                style: GoogleFonts.getFont(
+                    'Righteous')), //"Name: $_myData['username']"
+            subtitle: Text('Tag: ${_myData['tag']}'),
+          )),
       Card(
           color: Colors.red,
           child: ListTile(
               leading: const Icon(Icons.person, size: 50.0),
               title: Text(
-                  'Name: ${myTeam.isNotEmpty ? myTeam[0].username : 'Loading...'}'),
+                'Name: ${myTeam.isNotEmpty ? myTeam[0].username : 'Loading...'}',
+              ),
               subtitle: Text(
                   'Tag:  ${myTeam.isNotEmpty ? myTeam[0].tag : 'Loading...'}'),
-              trailing: _icon)),
+              trailing: myTeam.isNotEmpty ? myMenu(myTeam[0]) : _icon)),
       Card(
-          color: Colors.red,
-          child: ListTile(
-              leading: const Icon(Icons.person, size: 50.0),
-              title: Text(
-                  'Name: ${myTeam.length > 1 ? myTeam[1].username : 'Loading...'}'),
-              subtitle: Text(
-                  'Tag:  ${myTeam.length > 1 ? myTeam[1].tag : 'Loading...'}'),
-              trailing: _icon)),
+        color: Colors.red,
+        child: ListTile(
+          leading: const Icon(Icons.person, size: 50.0),
+          title: Text(
+              'Name: ${myTeam.length > 1 ? myTeam[1].username : 'Loading...'}'),
+          subtitle:
+              Text('Tag:  ${myTeam.length > 1 ? myTeam[1].tag : 'Loading...'}'),
+          trailing: myTeam.isNotEmpty ? myMenu(myTeam[1]) : _icon,
+        ),
+      ),
       Card(
           color: Colors.red,
           child: ListTile(
@@ -88,7 +94,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
                   'Name: ${myTeam.length > 2 ? myTeam[2].username : 'Loading...'}'),
               subtitle: Text(
                   'Tag:  ${myTeam.length > 2 ? myTeam[2].tag : 'Loading...'}'),
-              trailing: _icon)),
+              trailing: myTeam.isNotEmpty ? myMenu(myTeam[2]) : _icon)),
       Card(
           color: Colors.red,
           child: ListTile(
@@ -97,7 +103,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
                   'Name: ${myTeam.length > 3 ? myTeam[3].username : 'Loading...'}'),
               subtitle: Text(
                   'Tag:  ${myTeam.length > 3 ? myTeam[3].tag : 'Loading...'}'),
-              trailing: _icon)),
+              trailing: myTeam.isNotEmpty ? myMenu(myTeam[3]) : _icon)),
       ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red, // background
@@ -105,13 +111,54 @@ class _MyPlayerListState extends State<MyPlayerList> {
           ),
           onPressed: () {
             setState(() {
-              _icon = const CircularProgressIndicator();
+              _icon = const CircularProgressIndicator(
+                color: Colors.white,
+              );
             });
             _loadData();
             //getUserProfile();
           },
           child: Text(_nameButton))
     ]);
+  }
+
+  Widget myMenu(UserData player) {
+    return PopupMenuButton<String>(
+      onSelected: (String result) {
+        // Manejar la opción seleccionada
+        switch (result) {
+          case 'send_message':
+            String id = '';
+            getUserID(player.email).then((value) => id = value);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChatPage(
+                          friendId: id,
+                        ))); //
+            break;
+          case 'evaluate_player':
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return EvaluateDialog(
+                    teamMate: player,
+                  );
+                });
+            break;
+        }
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(
+          value: 'send_message',
+          child: Text('Send message'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'evaluate_player',
+          child: Text('Evaluate player'),
+        ),
+      ],
+    );
   }
 
   void searchPlayer() async {
