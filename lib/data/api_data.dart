@@ -35,7 +35,8 @@ class Character {
 }
 
 Future<List<Character>?> getCharactersList() async {
-  var url = Uri.parse('http://192.168.1.135:3000/');
+  var url = Uri.parse(
+      'https://esearchplayer-api.onrender.com'); //http://192.168.1.135:3000/
   var response = await http.get(url);
   if (response.statusCode == 200) {
     final jsonResponse = jsonDecode(response.body);

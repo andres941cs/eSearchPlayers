@@ -15,11 +15,11 @@ class MyDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.red,
+              color: Theme.of(context).primaryColor,
             ),
-            child: Text(
+            child: const Text(
               'eSearchPlayes',
               style: TextStyle(
                 color: Colors.white,
@@ -31,8 +31,8 @@ class MyDrawer extends StatelessWidget {
             leading: const Icon(Icons.home),
             title: const Text('Home'),
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const HomePage()));
             },
           ),
           ListTile(

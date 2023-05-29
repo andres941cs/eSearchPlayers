@@ -17,8 +17,9 @@ class MyAlertDialog extends StatelessWidget {
           'Are you sure you want to join?'), //Estas seguro de que quieres unirte?
       actions: [
         CupertinoDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel')),
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel', style: TextStyle(color: Colors.red)),
+        ),
         CupertinoDialogAction(
             onPressed: () async {
               _addUserToClan(guildName!).then((value) {
@@ -27,7 +28,10 @@ class MyAlertDialog extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => MyGuildPage()));
               });
             },
-            child: const Text('Join'))
+            child: const Text(
+              'Join',
+              style: TextStyle(color: Colors.red),
+            ))
       ],
     );
   }

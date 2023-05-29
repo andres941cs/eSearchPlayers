@@ -24,14 +24,18 @@ class _TeamPageState extends State<TeamPage> {
             Expanded(
               flex: 1,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
                     "Team Page",
-                    style: GoogleFonts.getFont('Righteous'),
+                    style: GoogleFonts.getFont('Righteous',
+                        textStyle: TextStyle(fontSize: 30),
+                        color: Colors.white),
                   ),
                   Text(
                     "On this page, you can search for companions to play games, but remember that you must respect the rules of behavior",
-                    style: GoogleFonts.getFont('Righteous'),
+                    style:
+                        GoogleFonts.getFont('Righteous', color: Colors.white),
                   ),
                 ],
               ),

@@ -26,7 +26,8 @@ class _GuildPageState extends State<GuildPage> {
             child: Center(
                 child: Text(
               "List Of Guilds",
-              style: GoogleFonts.getFont('Righteous', fontSize: 30),
+              style: GoogleFonts.getFont('Righteous',
+                  fontSize: 30, color: Colors.white),
             ))),
         Expanded(
             flex: 8,
@@ -44,7 +45,7 @@ class _GuildPageState extends State<GuildPage> {
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const MyGuildPage(),
                     )),
-                child: const Text("Cancel")),
+                child: const Text("Search")),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor),

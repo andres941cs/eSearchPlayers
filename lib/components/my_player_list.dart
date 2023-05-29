@@ -16,7 +16,10 @@ class MyPlayerList extends StatefulWidget {
 class _MyPlayerListState extends State<MyPlayerList> {
   String _name = 'Loading...';
   String _tag = 'Loading...';
-  Widget _icon = const Icon(Icons.search);
+  Widget _icon = const Icon(
+    Icons.search,
+    color: Colors.white,
+  );
   String _nameButton = 'Search';
   bool _searching = false;
   Map<String, dynamic> _myData = {};
@@ -59,50 +62,68 @@ class _MyPlayerListState extends State<MyPlayerList> {
       Card(
           color: Colors.red,
           child: ListTile(
-            leading: const Icon(Icons.person, size: 50.0, color: Colors.black),
+            leading: const Icon(Icons.person, size: 50.0, color: Colors.white),
             title: Text('Name: ${_myData['username']}',
-                style: GoogleFonts.getFont(
-                    'Righteous')), //"Name: $_myData['username']"
-            subtitle: Text('Tag: ${_myData['tag']}'),
+                style: GoogleFonts.getFont('Righteous',
+                    color: Colors.white)), //"Name: $_myData['username']"
+            subtitle: Text('Tag: ${_myData['tag']}',
+                style: GoogleFonts.getFont('Mukta', color: Colors.white)),
           )),
       Card(
           color: Colors.red,
           child: ListTile(
-              leading: const Icon(Icons.person, size: 50.0),
+              leading:
+                  const Icon(Icons.person, size: 50.0, color: Colors.white),
               title: Text(
-                'Name: ${myTeam.isNotEmpty ? myTeam[0].username : 'Loading...'}',
-              ),
+                  'Name: ${myTeam.isNotEmpty ? myTeam[0].username : 'Loading...'}',
+                  style: GoogleFonts.getFont('Righteous', color: Colors.white)),
               subtitle: Text(
-                  'Tag:  ${myTeam.isNotEmpty ? myTeam[0].tag : 'Loading...'}'),
+                  'Tag:  ${myTeam.isNotEmpty ? myTeam[0].tag : 'Loading...'}',
+                  style: GoogleFonts.getFont('Mukta', color: Colors.white)),
               trailing: myTeam.isNotEmpty ? myMenu(myTeam[0]) : _icon)),
       Card(
         color: Colors.red,
         child: ListTile(
-          leading: const Icon(Icons.person, size: 50.0),
+          leading: const Icon(
+            Icons.person,
+            size: 50.0,
+            color: Colors.white,
+          ),
           title: Text(
-              'Name: ${myTeam.length > 1 ? myTeam[1].username : 'Loading...'}'),
-          subtitle:
-              Text('Tag:  ${myTeam.length > 1 ? myTeam[1].tag : 'Loading...'}'),
+              'Name: ${myTeam.length > 1 ? myTeam[1].username : 'Loading...'}',
+              style: GoogleFonts.getFont('Righteous', color: Colors.white)),
+          subtitle: Text(
+              'Tag:  ${myTeam.length > 1 ? myTeam[1].tag : 'Loading...'}',
+              style: GoogleFonts.getFont('Mukta', color: Colors.white)),
           trailing: myTeam.isNotEmpty ? myMenu(myTeam[1]) : _icon,
         ),
       ),
       Card(
           color: Colors.red,
           child: ListTile(
-              leading: const Icon(Icons.person, size: 50.0),
+              leading: const Icon(
+                Icons.person,
+                size: 50.0,
+                color: Colors.white,
+              ),
               title: Text(
-                  'Name: ${myTeam.length > 2 ? myTeam[2].username : 'Loading...'}'),
+                  'Name: ${myTeam.length > 2 ? myTeam[2].username : 'Loading...'}',
+                  style: GoogleFonts.getFont('Righteous', color: Colors.white)),
               subtitle: Text(
-                  'Tag:  ${myTeam.length > 2 ? myTeam[2].tag : 'Loading...'}'),
+                  'Tag:  ${myTeam.length > 2 ? myTeam[2].tag : 'Loading...'}',
+                  style: GoogleFonts.getFont('Mukta', color: Colors.white)),
               trailing: myTeam.isNotEmpty ? myMenu(myTeam[2]) : _icon)),
       Card(
           color: Colors.red,
           child: ListTile(
-              leading: const Icon(Icons.person, size: 50.0),
+              leading:
+                  const Icon(Icons.person, size: 50.0, color: Colors.white),
               title: Text(
-                  'Name: ${myTeam.length > 3 ? myTeam[3].username : 'Loading...'}'),
+                  'Name: ${myTeam.length > 3 ? myTeam[3].username : 'Loading...'}',
+                  style: GoogleFonts.getFont('Righteous', color: Colors.white)),
               subtitle: Text(
-                  'Tag:  ${myTeam.length > 3 ? myTeam[3].tag : 'Loading...'}'),
+                  'Tag:  ${myTeam.length > 3 ? myTeam[3].tag : 'Loading...'}',
+                  style: GoogleFonts.getFont('Mukta', color: Colors.white)),
               trailing: myTeam.isNotEmpty ? myMenu(myTeam[3]) : _icon)),
       ElevatedButton(
           style: ElevatedButton.styleFrom(

@@ -53,23 +53,29 @@ class _MyGuildPageState extends State<MyGuildPage> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       drawer: const MyDrawer(),
+      appBar: AppBar(
+        title: const Text('My Guild'),
+        centerTitle: true,
+        backgroundColor: Colors.grey[850],
+        elevation: 0,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: const EdgeInsets.all(6.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Colors.grey[800],
+                color: Colors.grey[500],
               ),
               child: Column(
                 children: [
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 20),
                   Center(
                     child: Text(
                       guild?.name ?? 'Loading...',
-                      style: GoogleFonts.getFont('Righteous'),
+                      style: GoogleFonts.getFont('Righteous', fontSize: 30),
                     ),
                   ),
                   Row(
@@ -99,18 +105,25 @@ class _MyGuildPageState extends State<MyGuildPage> {
                     children: [
                       Text(
                         'Members', //$memberCount
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: GoogleFonts.getFont('Kanit', fontSize: 14),
                       ),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red),
-                          onPressed: () => leaveGuild(),
+                              backgroundColor: Theme.of(context).primaryColor),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return showAlertDialog(context);
+                                });
+                          },
                           child: Text('Leave'))
                     ],
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 4),
             Expanded(
               child: guild == null
                   ? const Center(child: CircularProgressIndicator())
@@ -118,16 +131,20 @@ class _MyGuildPageState extends State<MyGuildPage> {
                       itemCount: guild?.members.length, //memberCount
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child:
-                                  const Icon(Icons.person, color: Colors.black),
-                            ),
-                            title: Text('Miembro ${guild?.members[index]}'),
-                            tileColor: Colors.grey[400],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ));
+                          leading: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.person, color: Colors.black),
+                          ),
+                          title: Text(
+                            'Miembro: ${guild?.members[index]}',
+                            style: GoogleFonts.getFont('Ubuntu',
+                                fontSize: 14, color: Colors.white),
+                          ),
+                          tileColor: Theme.of(context).primaryColor,
+                        );
+                        //shape: RoundedRectangleBorder(
+                        //borderRadius: BorderRadius.circular(8),
+                        //)
                       },
                     ),
             ),
@@ -158,5 +175,33 @@ class _MyGuildPageState extends State<MyGuildPage> {
 
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const GuildPage()));
+  }
+
+  showAlertDialog(BuildContext context) {
+    // Configuración del AlertDialog
+    return AlertDialog(
+      title: const Text("WARNING"),
+      content: const Text("Are you sure you want to leave the clan?"),
+      actions: [
+        // Botón 1
+        TextButton(
+          child: const Text("YES", style: TextStyle(color: Colors.red)),
+          onPressed: () {
+            leaveGuild();
+          },
+        ),
+        // Botón 2
+        TextButton(
+          child: const Text(
+            "NO",
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () {
+            // Lógica a ejecutar al presionar el Botón 2
+            Navigator.of(context).pop(); // Cerrar el AlertDialog
+          },
+        ),
+      ],
+    );
   }
 }

@@ -24,20 +24,32 @@ class _MyFormGuildState extends State<MyFormGuild> {
           children: <Widget>[
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Nombre'),
+              decoration: const InputDecoration(
+                  labelText: 'Name',
+                  labelStyle: TextStyle(color: Colors.grey),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red))),
               validator: (value) {
                 if (value?.isEmpty ?? true) {
-                  return 'Por favor ingrese un nombre';
+                  return 'Please enter some text';
                 }
                 return null;
               },
             ),
             TextFormField(
               controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(
+                labelText: 'Description',
+                labelStyle: TextStyle(color: Colors.grey),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors
+                          .red), // Cambia el color de la línea de borde cuando el campo tiene foco
+                ),
+              ),
               validator: (value) {
                 if (value?.isEmpty ?? true) {
-                  return 'Por favor ingrese una descripcion';
+                  return 'Please enter some text';
                 }
                 return null;
               },
@@ -46,12 +58,18 @@ class _MyFormGuildState extends State<MyFormGuild> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
                   child: const Text('Cancelar'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
                   child: const Text('Create'),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {

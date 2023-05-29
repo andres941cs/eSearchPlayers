@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         drawer: const MyDrawer(),
-        backgroundColor: Color.fromRGBO(52, 53, 65, 1),
+        backgroundColor: const Color.fromRGBO(52, 53, 65, 1),
         body: Column(
           children: [
             Expanded(
@@ -67,17 +68,32 @@ class _HomePageState extends State<HomePage> {
                     ? const CircularProgressIndicator()
                     : SingleChildScrollView(
                         child: DataTable(
-                          columns: const [
-                            DataColumn(label: Text('Name')),
-                            DataColumn(label: Text('Role')),
+                          columns: [
+                            DataColumn(
+                                label: Text('Name',
+                                    style: GoogleFonts.getFont('Righteous',
+                                        color: Colors.grey[200]))),
+                            DataColumn(
+                                label: Text('Role',
+                                    style: GoogleFonts.getFont('Righteous',
+                                        color: Colors.grey[200]))),
                             //DataColumn(label: Text('Pick Rate')),
-                            DataColumn(label: Text('Win Rate')),
+                            DataColumn(
+                                label: Text('Win Rate',
+                                    style: GoogleFonts.getFont('Righteous',
+                                        color: Colors.grey[200]))),
                           ],
                           rows: _myDataList!
                               .map((data) => DataRow(cells: [
-                                    DataCell(Text(data.name)),
-                                    DataCell(Text(data.role)),
-                                    DataCell(Text(data.winRate)),
+                                    DataCell(Text(data.name,
+                                        style: GoogleFonts.getFont('Open Sans',
+                                            color: Colors.grey[200]))),
+                                    DataCell(Text(data.role,
+                                        style: GoogleFonts.getFont('Open Sans',
+                                            color: Colors.grey[200]))),
+                                    DataCell(Text(data.winRate,
+                                        style: GoogleFonts.getFont('Open Sans',
+                                            color: Colors.grey[200]))),
                                   ]))
                               .toList(),
                         ),
@@ -130,22 +146,26 @@ class _HomePageState extends State<HomePage> {
         children: [
           Column(
             children: [
-              Text('Rango Game: ', style: TextStyle(color: Colors.grey[200])),
+              Text('Rango Game:',
+                  style: GoogleFonts.getFont('Righteous',
+                      color: Colors.grey[200])),
               SizedBox(
                 height: 40,
                 width: 40,
-                child: Image.network(
-                    _myData['rankImage'] ??
-                        'https://media2.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif?cid=ecf05e47u7h4yuqnida1idvnrnfw520s8mpp8hcqmfjb9pjs&ep=v1_gifs_search&rid=giphy.gif&ct=g',
-                    fit: BoxFit.cover),
+                child: _myData.isEmpty
+                    ? const CircularProgressIndicator()
+                    : Image.network(_myData['rankImage'], fit: BoxFit.cover),
               ),
-              Text(
-                  _myData['rank'] ?? 'Valor por defecto') //_myData['rankImage']
+              Text(_myData['rank'] ?? 'Valor por defecto',
+                  style:
+                      GoogleFonts.getFont('Righteous', color: Colors.grey[200]))
             ],
           ),
           Column(
             children: [
-              const Text('Rango App: '),
+              Text('Rango App:',
+                  style: GoogleFonts.getFont('Righteous',
+                      color: Colors.grey[200])),
               SizedBox(
                 height: 40,
                 width: 40,
@@ -153,7 +173,9 @@ class _HomePageState extends State<HomePage> {
                     ? const CircularProgressIndicator()
                     : Image.network(myRankAppImg, fit: BoxFit.cover),
               ),
-              Text(myRankName ?? 'Valor por defecto')
+              Text(myRankName.isEmpty ? 'Valor por defecto' : myRankName,
+                  style:
+                      GoogleFonts.getFont('Righteous', color: Colors.grey[200]))
             ],
           ),
         ],
@@ -170,7 +192,8 @@ class _HomePageState extends State<HomePage> {
         .get();
     String tag = snapshot['tag'];
     tag = tag.replaceAll('#', '%23');
-    var url = Uri.parse('http://192.168.1.135:3000/user/$tag');
+    var url = Uri.parse(
+        'https://esearchplayer-api.onrender.com/user/$tag'); //http://192.168.1.135:3000/user/$tag
     // Para python 5000 y para node 3000
     var response = await http.get(url);
     if (response.statusCode == 200) {
@@ -179,8 +202,6 @@ class _HomePageState extends State<HomePage> {
       String rankImage = jsonResponse['Icono'];
       //myRank = rank;
       // Realizar una consulta para obtener una referencia al documento basándote en el correo electrónico
-
-      print(user!.email);
       final querySnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('email', isEqualTo: user.email)
@@ -265,17 +286,3 @@ class _HomePageState extends State<HomePage> {
 
   //Fin de la clase
 }
-/* 
-Column(children: [
-          Text("Logged In as " + user!.email!),
-          
-        ])
-Expanded(
-              child: FutureBuilder(
-            future: getUserTag(user!.email!),
-            builder: (context, snapshot) {
-              return Text(snapshot.data.toString());
-            },
-          ))
-*/
-
