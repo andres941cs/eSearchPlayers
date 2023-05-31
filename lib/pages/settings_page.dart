@@ -11,7 +11,7 @@ class SettingsPage extends StatelessWidget {
             title: const Text("Settings"),
             backgroundColor: Theme.of(context).primaryColor),
         drawer: const MyDrawer(),
-        backgroundColor: Color.fromRGBO(52, 53, 65, 1),
+        backgroundColor: const Color.fromRGBO(52, 53, 65, 1),
         body: Column(
           children: [
             ListTile(
@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
                   Icons.language,
                   color: Colors.white,
                 ),
-                title: Text('Language',
+                title: const Text('Language',
                     style: TextStyle(
                       color: Colors.white,
                     )),
@@ -31,7 +31,7 @@ class SettingsPage extends StatelessWidget {
                   Icons.sunny,
                   color: Colors.white,
                 ),
-                title: Text('Theme',
+                title: const Text('Theme',
                     style: TextStyle(
                       color: Colors.white,
                     )),

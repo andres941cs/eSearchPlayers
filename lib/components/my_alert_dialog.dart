@@ -24,8 +24,8 @@ class MyAlertDialog extends StatelessWidget {
             onPressed: () async {
               _addUserToClan(guildName!).then((value) {
                 Navigator.of(context).pop();
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => MyGuildPage()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const MyGuildPage()));
               });
             },
             child: const Text(

@@ -123,11 +123,9 @@ class _HomePageState extends State<HomePage> {
           .where("email", isEqualTo: user.email)
           .get();
 
-      if (querySnapshot.docs.length > 0) {
+      if (querySnapshot.docs.isNotEmpty) {
         final doc = querySnapshot.docs[0];
         final data = doc.data();
-        // Usa los datos como desees
-        print(data);
         setState(() {
           _myData = data;
         });
@@ -252,7 +250,6 @@ class _HomePageState extends State<HomePage> {
     if (querySnapshot['evaluation'].length > 9) {
       List<dynamic> evaluationList = querySnapshot['evaluation']
           .sublist(querySnapshot['evaluation'].length - 10);
-      print(evaluationList.length);
       int lowerCount =
           evaluationList.where((element) => element == 'Lower_Rank').length;
       int equalCount =
@@ -262,27 +259,21 @@ class _HomePageState extends State<HomePage> {
 
       if (lowerCount > equalCount && lowerCount > higherCount) {
         // Realizar método para 'Lower_Rank'
-        print('Realizando método para Lower_Rank');
         getRankNumber().then((value) => setRankApp(value - 1));
       } else if (equalCount > lowerCount && equalCount > higherCount) {
         // Realizar método para 'Equal_Rank'
-        print('Realizando método para Equal_Rank');
         getRankNumber().then((value) => setRankApp(value));
       } else if (higherCount > lowerCount && higherCount > equalCount) {
         // Realizar método para 'Higher_Rank'
-        print('Realizando método para Higher_Rank');
         getRankNumber().then((value) => setRankApp(value + 1));
         //setRankApp(snapshot['RankApp'] + 1);
       } else {
-        // Si hay un empate o la lista está vacía, maneja el caso según tus necesidades
+        // Si hay un empate o la lista está vacía
         getRankNumber().then((value) => setRankApp(value));
       }
-      print('Lower: $lowerCount, Equal: $equalCount, Higher: $higherCount');
+      //print('Lower: $lowerCount, Equal: $equalCount, Higher: $higherCount');
     } else {
-      print('No se puede actualizar');
+      getRankNumber().then((value) => setRankApp(value));
     }
-    //'Lower_Rank', 'Equal_Rank', 'Higher_Rank'
   }
-
-  //Fin de la clase
 }

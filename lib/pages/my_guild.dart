@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esearchplayers/components/my_drawer.dart';
 import 'package:esearchplayers/data/guild_data.dart';
 import 'package:esearchplayers/data/user_data.dart' as user_data;
-import 'package:esearchplayers/pages/guild_home_page.dart';
 import 'package:esearchplayers/pages/guild_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +37,6 @@ class _MyGuildPageState extends State<MyGuildPage> {
           });
         });
 
-    print(clanName);
     /*
     getGuildData(clanName).then((value) {
       setState(() {
@@ -117,7 +115,7 @@ class _MyGuildPageState extends State<MyGuildPage> {
                                   return showAlertDialog(context);
                                 });
                           },
-                          child: Text('Leave'))
+                          child: const Text('Leave'))
                     ],
                   ),
                 ],

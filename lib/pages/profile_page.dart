@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:esearchplayers/data/user_data.dart';
 import 'package:esearchplayers/services/cloud_storage.dart';
 import 'package:esearchplayers/services/image_picker.dart';
@@ -117,7 +116,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor),
-                        onPressed: () => print("CANCEL"),
+                        onPressed: () {
+                          setState(() {
+                            isEditing = false;
+                          });
+                        },
                         child: const Text("Cancel")),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -156,7 +159,6 @@ String userEmail() {
   FirebaseAuth auth = FirebaseAuth.instance;
   User? user = auth.currentUser;
   if (user != null) {
-    // Aquí puede obtener los datos del usuario, como su nombre, correo electrónico, etc.
     String email = user.email ?? '';
     return email;
   }

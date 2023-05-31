@@ -19,7 +19,7 @@ class _GuildPageState extends State<GuildPage> {
       appBar: AppBar(
           title: const Text("Guild"),
           backgroundColor: Theme.of(context).primaryColor),
-      backgroundColor: Color.fromRGBO(52, 53, 65, 1),
+      backgroundColor: const Color.fromRGBO(52, 53, 65, 1),
       body: Column(children: [
         Expanded(
             flex: 2,
@@ -94,7 +94,6 @@ class _GuildPageState extends State<GuildPage> {
                       builder: (_) => MyAlertDialog(
                             guildName: document['name'],
                           ));
-                  //document['name']
                 },
               ),
             );

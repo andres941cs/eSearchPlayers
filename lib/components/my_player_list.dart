@@ -14,8 +14,6 @@ class MyPlayerList extends StatefulWidget {
 }
 
 class _MyPlayerListState extends State<MyPlayerList> {
-  String _name = 'Loading...';
-  String _tag = 'Loading...';
   Widget _icon = const Icon(
     Icons.search,
     color: Colors.white,
@@ -24,7 +22,6 @@ class _MyPlayerListState extends State<MyPlayerList> {
   bool _searching = false;
   Map<String, dynamic> _myData = {};
   List<UserData> myTeam = [];
-  //UserData(username: 'Loading...', email: 'Loading...', tag: 'Loading...'),
   List<String> namePlayers = [];
   void _loadData() async {
     if (_nameButton == 'Search') {
@@ -44,8 +41,6 @@ class _MyPlayerListState extends State<MyPlayerList> {
       //Pediente actualizar el icono
     }
     setState(() {
-      _name = 'My Team';
-      _tag = '#1234';
       //_icon = myMenu(myTeam[0]); //check
     });
   }

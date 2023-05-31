@@ -33,28 +33,23 @@ class _ChatPageState extends State<ChatPage> {
         appBar: AppBar(
             title: const Text("Messages"),
             backgroundColor: Theme.of(context).primaryColor),
-        backgroundColor: Color.fromRGBO(52, 53, 65, 1),
+        backgroundColor: const Color.fromRGBO(52, 53, 65, 1),
         body: WillPopScope(
+          onWillPop: onBackPress,
           child: Stack(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   // List of messages
                   buildListMessage(),
-
-                  // Sticker
-                  //(isShowSticker ? buildSticker() : Container()),
-
                   // Input content
                   buildInput(),
                 ],
               ),
-
               // Loading
               //buildLoading()
             ],
           ),
-          onWillPop: onBackPress, //
         ));
   }
 
@@ -68,9 +63,9 @@ class _ChatPageState extends State<ChatPage> {
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
                   listMessage = snapshot.data!.docs;
-                  if (listMessage.length > 0) {
+                  if (listMessage.isNotEmpty) {
                     return ListView.builder(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       itemBuilder: (context, index) =>
                           buildItem(index, snapshot.data?.docs[index]),
                       itemCount: snapshot.data?.docs.length,
@@ -78,10 +73,10 @@ class _ChatPageState extends State<ChatPage> {
                       controller: listScrollController,
                     );
                   } else {
-                    return Center(child: Text("No message here yet..."));
+                    return const Center(child: Text("No message here yet..."));
                   }
                 } else {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(
                       color: Colors.red, //ColorConstants.themeColor
                     ),
@@ -89,7 +84,7 @@ class _ChatPageState extends State<ChatPage> {
                 }
               },
             )
-          : Center(
+          : const Center(
               child: CircularProgressIndicator(
                 color: Colors.red, //
               ),
@@ -116,7 +111,7 @@ class _ChatPageState extends State<ChatPage> {
               margin: const EdgeInsets.symmetric(horizontal: 1),
               child: IconButton(
                 icon: const Icon(Icons.image),
-                onPressed: () => print("object"), //getImage
+                onPressed: () => print("Selecionar Image"), //getImage
                 color: Colors.red, //ColorConstants.primaryColor
               ),
             ),
@@ -198,7 +193,7 @@ class _ChatPageState extends State<ChatPage> {
       sendMessage(content, type, groupChatId, currentUserId, widget.friendId);
       if (listScrollController.hasClients) {
         listScrollController.animateTo(0,
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+            duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
       }
     } else {
       print('Nothing to send');
@@ -228,18 +223,18 @@ class _ChatPageState extends State<ChatPage> {
             messageChat.type == TypeMessage.text
                 // Text
                 ? Container(
-                    child: Text(
-                      messageChat.content,
-                      style: TextStyle(
-                          color: Colors.red), //ColorConstants.primaryColor
-                    ),
-                    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                     width: 200,
                     decoration: BoxDecoration(
                         color: Colors.grey[800], //ColorConstants.greyColor2
                         borderRadius: BorderRadius.circular(8)),
                     margin: EdgeInsets.only(
                         bottom: isLastMessageRight(index) ? 20 : 10, right: 10),
+                    child: Text(
+                      messageChat.content,
+                      style: TextStyle(
+                          color: Colors.red), //ColorConstants.primaryColor
+                    ),
                   )
                 : messageChat.type == TypeMessage.image
                     // Image
@@ -478,6 +473,8 @@ class _ChatPageState extends State<ChatPage> {
               // Time
               isLastMessageLeft(index)
                   ? Container(
+                      margin:
+                          const EdgeInsets.only(left: 50, top: 5, bottom: 5),
                       child: Text(
                         DateFormat('dd MMM kk:mm').format(
                             DateTime.fromMillisecondsSinceEpoch(
@@ -487,17 +484,16 @@ class _ChatPageState extends State<ChatPage> {
                             fontSize: 12,
                             fontStyle: FontStyle.italic),
                       ),
-                      margin: EdgeInsets.only(left: 50, top: 5, bottom: 5),
                     )
-                  : SizedBox.shrink()
+                  : const SizedBox.shrink()
             ],
             crossAxisAlignment: CrossAxisAlignment.start,
           ),
-          margin: EdgeInsets.only(bottom: 10),
+          margin: const EdgeInsets.only(bottom: 10),
         );
       }
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }
