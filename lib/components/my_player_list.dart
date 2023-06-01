@@ -67,7 +67,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
   Widget build(BuildContext context) {
     return Column(children: [
       Card(
-          color: Colors.red,
+          color: Theme.of(context).primaryColor,
           child: ListTile(
             leading: const Icon(Icons.person, size: 50.0, color: Colors.white),
             title: Text('Name: ${_myData['username']}',
@@ -77,7 +77,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
                 style: GoogleFonts.getFont('Mukta', color: Colors.white)),
           )),
       Card(
-          color: Colors.red,
+          color: Theme.of(context).primaryColor,
           child: ListTile(
               leading:
                   const Icon(Icons.person, size: 50.0, color: Colors.white),
@@ -89,7 +89,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
                   style: GoogleFonts.getFont('Mukta', color: Colors.white)),
               trailing: myTeam.isNotEmpty ? myMenu(myTeam[0]) : _icon)),
       Card(
-        color: Colors.red,
+        color: Theme.of(context).primaryColor,
         child: ListTile(
           leading: const Icon(
             Icons.person,
@@ -106,7 +106,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
         ),
       ),
       Card(
-          color: Colors.red,
+          color: Theme.of(context).primaryColor,
           child: ListTile(
               leading: const Icon(
                 Icons.person,
@@ -121,7 +121,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
                   style: GoogleFonts.getFont('Mukta', color: Colors.white)),
               trailing: myTeam.isNotEmpty ? myMenu(myTeam[2]) : _icon)),
       Card(
-          color: Colors.red,
+          color: Theme.of(context).primaryColor,
           child: ListTile(
               leading:
                   const Icon(Icons.person, size: 50.0, color: Colors.white),
@@ -134,7 +134,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
               trailing: myTeam.isNotEmpty ? myMenu(myTeam[3]) : _icon)),
       ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red, // background
+            backgroundColor: Theme.of(context).primaryColor, // background
             foregroundColor: Colors.white, // foreground
           ),
           onPressed: () {

@@ -17,6 +17,7 @@ dependencies:
   image_picker: ^0.8.7+4
   google_fonts: ^4.0.4
   intl: ^0.18.1
+  flutter_swiper_plus: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -28,3 +29,8 @@ flutter:
 
   assets:
   - lib/images/mapa_ascend.png
+  - lib/images/mapa_bind.png
+  - lib/images/mapa_split.png
+  - lib/images/mapa_fracture.png
+  - lib/images/mapa_haven.png
+  - lib/images/logo_blanco.png

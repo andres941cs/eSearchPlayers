@@ -16,17 +16,25 @@ class MyDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: const Text(
-              'eSearchPlayes',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
               ),
-            ),
-          ),
+              child: Column(
+                children: [
+                  const Text(
+                    'eSearchPlayes',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                  Image.asset(
+                    'lib/images/logo_blanco.png',
+                    height: 100,
+                    width: 100,
+                  )
+                ],
+              )),
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),

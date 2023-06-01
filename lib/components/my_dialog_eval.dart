@@ -24,7 +24,7 @@ class _EvaluateDialogState extends State<EvaluateDialog> {
         children: [
           const Text('Is the player currently in the rank they should be in?'),
           RadioListTile(
-            activeColor: Colors.red,
+            activeColor: Theme.of(context).primaryColor,
             title: const Text('Lower Rank'),
             value: _options[0],
             groupValue: selectedValue,
@@ -35,7 +35,7 @@ class _EvaluateDialogState extends State<EvaluateDialog> {
             },
           ),
           RadioListTile(
-            activeColor: Colors.red,
+            activeColor: Theme.of(context).primaryColor,
             title: const Text('Equal Rank'),
             value: _options[1],
             groupValue: selectedValue,
@@ -46,7 +46,7 @@ class _EvaluateDialogState extends State<EvaluateDialog> {
             },
           ),
           RadioListTile(
-            activeColor: Colors.red,
+            activeColor: Theme.of(context).primaryColor,
             title: const Text('Higher Rank'),
             value: _options[2],
             groupValue: selectedValue,
@@ -62,13 +62,15 @@ class _EvaluateDialogState extends State<EvaluateDialog> {
       actions: [
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red, // background// foreground
+              backgroundColor:
+                  Theme.of(context).primaryColor, // background// foreground
             ),
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Cancel')),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red, // background// foreground
+              backgroundColor:
+                  Theme.of(context).primaryColor, // background// foreground
             ),
             onPressed: () async {
               _sendEvaluation(widget.teamMate.email);

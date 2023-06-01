@@ -42,9 +42,7 @@ class _MyFormGuildState extends State<MyFormGuild> {
                 labelText: 'Description',
                 labelStyle: TextStyle(color: Colors.grey),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colors
-                          .red), // Cambia el color de la línea de borde cuando el campo tiene foco
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
               validator: (value) {

@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               flex: 2,
               child: Card(
-                color: Colors.red,
+                color: Theme.of(context).primaryColor, //Colors.red
                 child: _myDataList == null
                     ? const CircularProgressIndicator()
                     : SingleChildScrollView(
@@ -98,23 +99,39 @@ class _HomePageState extends State<HomePage> {
                               .toList(),
                         ),
                       ),
-
-                // contenido de la segunda columna
               ),
             ),
             Expanded(
               flex: 3,
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.all(5),
-                child: Image.asset('lib/images/mapa_ascend.png'),
+              // child: Container(
+              //   decoration: BoxDecoration(
+              //       color: Colors.red, borderRadius: BorderRadius.circular(10)),
+              //   padding: const EdgeInsets.all(5),
+              //   child: Image.asset('lib/images/mapa_ascend.png'),
+              // ),
+              child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return Image.asset(
+                    images[index],
+                    fit: BoxFit.fill,
+                  );
+                },
+                itemCount: 5,
+                pagination: const SwiperPagination(),
+                control: const SwiperControl(),
               ),
             ),
           ],
         ));
   }
 
+  List<String> images = const [
+    'lib/images/mapa_ascend.png',
+    'lib/images/mapa_bind.png',
+    'lib/images/mapa_split.png',
+    'lib/images/mapa_fracture.png',
+    'lib/images/mapa_haven.png',
+  ];
   void getUserProfile() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -136,7 +153,8 @@ class _HomePageState extends State<HomePage> {
   Widget headerHome() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.red, borderRadius: BorderRadius.circular(10)),
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(10)), //Colors.red
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       child: Row(
