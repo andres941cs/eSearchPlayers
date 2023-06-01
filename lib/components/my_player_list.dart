@@ -28,21 +28,33 @@ class _MyPlayerListState extends State<MyPlayerList> {
       _nameButton = 'Cancel';
       _searching = true;
       updateSearching(_myData['email'], _searching);
-      isTeamCreated().then((value) => showTeamCreated(value));
+      isTeamCreated().then((value) {
+        if (value == null) {
+          searchPlayer();
+        } else {
+          showTeamCreated(value);
+        }
+      });
     } else if (_nameButton == 'Cancel') {
       _nameButton = 'Search';
       _searching = false;
       updateSearching(_myData['email'], _searching);
+      _icon = const Icon(
+        Icons.search,
+        color: Colors.white,
+      );
     } else {
       //En caso de que el boton sea 'Finalizar equipo'
       deleteTeam();
       _nameButton = 'Search';
       myTeam.clear();
       //Pediente actualizar el icono
+      _icon = const Icon(
+        Icons.search,
+        color: Colors.white,
+      );
     }
-    setState(() {
-      //_icon = myMenu(myTeam[0]); //check
-    });
+    setState(() {});
   }
 
   @override
@@ -178,43 +190,52 @@ class _MyPlayerListState extends State<MyPlayerList> {
   }
 
   void searchPlayer() async {
-    db = FirebaseFirestore.instance;
-    QuerySnapshot querySnapshot = await db
-        .collection('users')
-        .where('search', isEqualTo: true)
-        .where('email', isNotEqualTo: _myData['email'])
-        .limit(4)
-        .get(); //Modificar - Que filtre por rango
-    if (querySnapshot.docs.isEmpty || querySnapshot.docs.length < 4) {
-      print('No hay jugadores buscando equipo');
-      //El booleano para que siga buscando
-      //await Future.delayed(const Duration(seconds: 10)); Esto es como un sleep
-    } else {
-      myTeam.clear();
-      for (int i = 0; i < querySnapshot.docs.length; i++) {
-        var data = querySnapshot.docs[i].data();
-        if (data is Map<String, dynamic>) {
-          Map<String, dynamic> myData = data;
-          UserData user = UserData(
-            username: myData['username'],
-            tag: myData['tag'],
-            email: myData['email'],
-          );
-          setState(() {
-            myTeam.add(user);
-          });
-          //Agrega el email del jugador al equipo
-          namePlayers.add(myData['email']);
-        }
+    bool searching = true;
+    QuerySnapshot? querySnapshot;
+    while (searching) {
+      await Future.delayed(const Duration(seconds: 8));
+      db = FirebaseFirestore.instance;
+      querySnapshot = await db
+          .collection('users')
+          .where('search', isEqualTo: true)
+          .where('email', isNotEqualTo: _myData['email'])
+          .limit(4)
+          .get();
+      //Modificar - Que filtre por rango
+      if (_searching == false) {
+        //El usuario ya no está buscando equipo
+        //print('Se detuvo la búsqueda');
+        return;
       }
-      namePlayers.add(_myData['email']); //Agrega el email del creador al equipo
-      //Actualiza el booleano al crear un equipo
-      updateSearching(_myData['email'], false);
-      createTeam(namePlayers);
-      setState(() {
-        _nameButton = 'Finish';
-      });
+      if (querySnapshot.docs.length >= 4) {
+        //No hay jugadores suficientes para crear un equipo
+        searching = false;
+      }
     }
+    myTeam.clear();
+    for (int i = 0; i < querySnapshot!.docs.length; i++) {
+      var data = querySnapshot.docs[i].data();
+      if (data is Map<String, dynamic>) {
+        Map<String, dynamic> myData = data;
+        UserData user = UserData(
+          username: myData['username'],
+          tag: myData['tag'],
+          email: myData['email'],
+        );
+        setState(() {
+          myTeam.add(user);
+        });
+        //Agrega el email del jugador al equipo
+        namePlayers.add(myData['email']);
+      }
+    }
+    namePlayers.add(_myData['email']); //Agrega el email del creador al equipo
+    //Actualiza el booleano al crear un equipo
+    updateSearching(_myData['email'], false);
+    createTeam(namePlayers);
+    setState(() {
+      _nameButton = 'Finish';
+    });
   }
 
   Future<List<dynamic>?> isTeamCreated() async {
@@ -234,36 +255,29 @@ class _MyPlayerListState extends State<MyPlayerList> {
     }
   }
 
-  void showTeamCreated(List<dynamic>? teamCreate) async {
-    //List<dynamic>? teamPlayers = await isTeamCreated();
-    if (teamCreate == null) {
-      //Se crear el equipo
-      searchPlayer();
-    } else {
-      //Se muestra el equipo
-      print(myTeam);
-      myTeam.clear();
-      teamCreate.forEach((element) async {
-        if (element != _myData['email']) {
-          db = FirebaseFirestore.instance;
-          QuerySnapshot querySnapshot = await db
-              .collection('users')
-              .where('email', isEqualTo: element)
-              .limit(1)
-              .get();
-          final doc = querySnapshot.docs[0];
-          final user = UserData.fromDocument(doc);
-          setState(() {
-            myTeam.add(user);
-          });
-        }
-      });
-      //Actualiza el booleano al encontrar equipo
-      updateSearching(_myData['email'], false);
-      setState(() {
-        _nameButton = 'Finish';
-      });
-    }
+  void showTeamCreated(List<dynamic> teamCreate) async {
+    //Se muestra el equipo
+    myTeam.clear();
+    teamCreate.forEach((element) async {
+      if (element != _myData['email']) {
+        db = FirebaseFirestore.instance;
+        QuerySnapshot querySnapshot = await db
+            .collection('users')
+            .where('email', isEqualTo: element)
+            .limit(1)
+            .get();
+        final doc = querySnapshot.docs[0];
+        final user = UserData.fromDocument(doc);
+        setState(() {
+          myTeam.add(user);
+        });
+      }
+    });
+    //Actualiza el booleano al encontrar equipo
+    updateSearching(_myData['email'], false);
+    setState(() {
+      _nameButton = 'Finish';
+    });
   }
 
   void getUserProfile() async {
@@ -274,18 +288,13 @@ class _MyPlayerListState extends State<MyPlayerList> {
           .where("email", isEqualTo: user.email)
           .get();
 
-      if (querySnapshot.docs.length > 0) {
+      if (querySnapshot.docs.isNotEmpty) {
         final doc = querySnapshot.docs[0];
         final data = doc.data();
-        // Usa los datos como desees
-        print(data);
         setState(() {
           _myData = data;
         });
-      } else {
-        // No se encontró ningún documento
       }
-      // El usuario no está conectado
     }
   }
 

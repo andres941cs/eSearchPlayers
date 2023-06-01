@@ -18,7 +18,7 @@ class _TeamPageState extends State<TeamPage> {
             title: const Text("Team"),
             backgroundColor: Theme.of(context).primaryColor),
         drawer: const MyDrawer(),
-        backgroundColor: Color.fromRGBO(52, 53, 65, 1),
+        backgroundColor: const Color.fromRGBO(52, 53, 65, 1),
         body: Column(
           children: [
             Expanded(
@@ -29,7 +29,7 @@ class _TeamPageState extends State<TeamPage> {
                   Text(
                     "Team Page",
                     style: GoogleFonts.getFont('Righteous',
-                        textStyle: TextStyle(fontSize: 30),
+                        textStyle: const TextStyle(fontSize: 30),
                         color: Colors.white),
                   ),
                   Text(

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyAlertDialog extends StatelessWidget {
-  String? guildName;
+  final String? guildName;
   final user = FirebaseAuth.instance.currentUser;
   MyAlertDialog({super.key, this.guildName});
 

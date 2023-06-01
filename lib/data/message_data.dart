@@ -17,11 +17,11 @@ class MessageChat {
 
   Map<String, dynamic> toJson() {
     return {
-      "idFrom": this.idFrom,
-      "idTo": this.idTo,
-      "timestamp": this.timestamp,
-      "content": this.content,
-      "type": this.type,
+      "idFrom": idFrom,
+      "idTo": idTo,
+      "timestamp": timestamp,
+      "content": content,
+      "type": type,
     };
   }
 

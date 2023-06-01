@@ -10,8 +10,8 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> {
-  final Color themeColor = Color.fromRGBO(52, 53, 65, 1);
-  int _limit = 7;
+  final Color themeColor = const Color.fromRGBO(52, 53, 65, 1);
+  final int _limit = 7;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class _MessagesPageState extends State<MessagesPage> {
       appBar: AppBar(
           title: const Text("Messages"),
           backgroundColor: Theme.of(context).primaryColor),
-      backgroundColor: Color.fromRGBO(52, 53, 65, 1),
+      backgroundColor: const Color.fromRGBO(52, 53, 65, 1),
       body: Container(
         child: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -35,7 +35,7 @@ class _MessagesPageState extends State<MessagesPage> {
               );
             } else {
               return ListView.builder(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 itemCount: snapshot.data?.docs.length,
                 itemBuilder: (context, index) =>
                     buildItem(context, snapshot.data?.docs[index]),
@@ -50,18 +50,18 @@ class _MessagesPageState extends State<MessagesPage> {
   Widget buildItem(BuildContext context,
       QueryDocumentSnapshot<Map<String, dynamic>>? document) {
     return ListTile(
-        leading: Icon(
+        leading: const Icon(
           Icons.account_circle,
           size: 50,
           color: Colors.white,
         ),
         title: Text(document!['username'],
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             )),
         subtitle: Text('Tag: ${document['tag']}',
-            style: TextStyle(color: Colors.grey)),
+            style: const TextStyle(color: Colors.grey)),
         onTap: () {
           Navigator.push(
               context,

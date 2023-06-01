@@ -211,11 +211,12 @@ class _HomePageState extends State<HomePage> {
         documentReference.update({
           'rank': rank,
           'rankImage': rankImage,
-        }).then((value) {
-          print('Datos actualizados correctamente.');
-        }).catchError((error) {
-          print('Error al actualizar los datos: $error');
         });
+        // .then((value) {
+        //   print('Datos actualizados correctamente.');
+        // }).catchError((error) {
+        //   print('Error al actualizar los datos: $error');
+        // });
       }
     }
   }

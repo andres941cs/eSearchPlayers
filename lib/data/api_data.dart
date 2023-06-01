@@ -1,16 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<String> getUrlImage() async {
-  var url = Uri.https('example.com');
-  var response = await http.get(url);
-  if (response.statusCode == 200) {
-    return response.body;
-  } else {
-    return 'Error';
-  }
-}
-
 class Character {
   final String name;
   final String role;
@@ -40,12 +30,12 @@ Future<List<Character>?> getCharactersList() async {
   var response = await http.get(url);
   if (response.statusCode == 200) {
     final jsonResponse = jsonDecode(response.body);
-
     //String name = jsonResponse['name'];
     //String role = jsonResponse['role'];
     List<Character> characters =
         List<Character>.from(jsonResponse.map((x) => Character.fromJson(x)));
     return characters;
+  } else {
+    return null;
   }
 }
-//print(await http.read(Uri.https('example.com', 'foobar.txt')));

@@ -13,11 +13,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool isEditing = false;
+  bool isEditingUsername = false;
+  bool isEditingTag = false;
   String _imageUrl = '';
   File? _imageUpload;
-  UserData? user;
-
+  //UserData? user;
+  User? user = FirebaseAuth.instance.currentUser;
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController tagController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,33 +84,35 @@ class _ProfilePageState extends State<ProfilePage> {
         future: futureUserData,
         builder: (BuildContext context, AsyncSnapshot<UserData> snapshot) {
           if (snapshot.hasData) {
+            usernameController.text = snapshot.data!.username;
+            tagController.text = snapshot.data!.tag;
             return Column(
               children: [
                 ListTile(
-                    title: textFormWidget('Username', snapshot.data?.username),
+                    title: textFormWidget(
+                        usernameController, 'Username', isEditingUsername),
                     trailing: IconButton(
                         icon: const Icon(Icons.edit),
                         onPressed: () {
                           setState(() {
-                            isEditing = true;
+                            isEditingUsername = true;
                           });
                         })),
                 ListTile(
-                    title: textFormWidget('Email', snapshot.data?.email),
+                    title: Text(snapshot.data?.email ?? '',
+                        style: const TextStyle(color: Colors.white)),
                     trailing: IconButton(
-                        icon: const Icon(Icons.edit),
+                        icon: const Icon(Icons.lock),
                         onPressed: () {
-                          setState(() {
-                            isEditing = true;
-                          });
+                          setState(() {});
                         })),
                 ListTile(
-                    title: textFormWidget('Tag', snapshot.data?.tag),
+                    title: textFormWidget(tagController, 'Tag', isEditingTag),
                     trailing: IconButton(
                         icon: const Icon(Icons.edit),
                         onPressed: () {
                           setState(() {
-                            isEditing = true;
+                            isEditingTag = true;
                           });
                         })),
                 Row(
@@ -118,14 +123,24 @@ class _ProfilePageState extends State<ProfilePage> {
                             backgroundColor: Theme.of(context).primaryColor),
                         onPressed: () {
                           setState(() {
-                            isEditing = false;
+                            isEditingUsername = false;
+                            isEditingTag = false;
                           });
                         },
                         child: const Text("Cancel")),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor),
-                        onPressed: () => print("CANCEL"),
+                        onPressed: () {
+                          editUserProfile(
+                              tag: tagController.text,
+                              username: usernameController.text);
+
+                          setState(() {
+                            isEditingUsername = false;
+                            isEditingTag = false;
+                          });
+                        },
                         child: const Text("Save")),
                   ],
                 )
@@ -137,35 +152,30 @@ class _ProfilePageState extends State<ProfilePage> {
         });
   }
 
-  Widget textFormWidget(String labelText, String? snapData) {
+  Widget textFormWidget(
+      TextEditingController controller, String labelText, bool isEditing) {
     return SizedBox(
       height: 50,
       //width: 200,
       child: TextFormField(
-        initialValue: snapData, //snapshot.data?.username
+        controller: controller,
         enabled: isEditing,
         decoration: InputDecoration(
           labelText: labelText,
-          border: const OutlineInputBorder(),
+          labelStyle: const TextStyle(
+              fontSize: 14, color: Colors.red, fontWeight: FontWeight.bold),
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red), // Cambia el color aquí
+          ),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red), // Cambia el color aquí
+          ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Colors.red[50],
         ),
       ),
     );
   }
 }
 
-String userEmail() {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  User? user = auth.currentUser;
-  if (user != null) {
-    String email = user.email ?? '';
-    return email;
-  }
-  return "";
-}
-
-UserData? user;
-//Cuando obtenga los datos del usuario, puede usarlos en cualquier lugar de su aplicación.
-Future<UserData> futureUserData =
-    getUserData(userEmail()).then((value) => user = value);
+Future<UserData> futureUserData = getUserData(user!.email);

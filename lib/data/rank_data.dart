@@ -8,11 +8,13 @@ void setRankApp(int newRank) async {
 
   querySnapshot.reference.update({
     'RankApp': newRank,
-  }).then((value) {
-    print('Datos actualizados correctamente.');
-  }).catchError((error) {
-    print('Error al actualizar los datos: $error');
   });
+  // .then((value) {
+  //   print('Datos actualizados correctamente.');
+  // })
+  // .catchError((error) {
+  //   print('Error al actualizar los datos: $error');
+  // });
 }
 
 Future<int> getRankNumber() async {
