@@ -1,20 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-void setRankApp(int newRank) async {
+Future setRankApp(int newRank) async {
   User? user = FirebaseAuth.instance.currentUser;
   final querySnapshot =
       await FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
 
   querySnapshot.reference.update({
     'RankApp': newRank,
+  }).then((value) {
+    print('Datos actualizados correctamente.');
+  }).catchError((error) {
+    print('Error al actualizar los datos: $error');
   });
-  // .then((value) {
-  //   print('Datos actualizados correctamente.');
-  // })
-  // .catchError((error) {
-  //   print('Error al actualizar los datos: $error');
-  // });
 }
 
 Future<int> getRankNumber() async {

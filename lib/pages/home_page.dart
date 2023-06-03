@@ -2,6 +2,7 @@ import 'package:esearchplayers/components/my_drawer.dart';
 import 'package:esearchplayers/data/api_data.dart';
 import 'package:esearchplayers/data/rank_data.dart';
 import 'package:esearchplayers/data/user_data.dart';
+import 'package:esearchplayers/pages/login_or_register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,18 +27,25 @@ class _HomePageState extends State<HomePage> {
   String myRankName = '';
   void logoutUser() {
     FirebaseAuth.instance.signOut();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginOrRegisterPage()),
+      (route) => false,
+    );
   }
 
   @override
   void initState() {
-    getAppRank();
-    updateRankApp();
+    super.initState();
+    getRankGame().then((value) async {
+      await updateRankApp();
+      getAppRank();
+    });
+
     getUserProfile();
-    getRankGame();
     getCharactersList().then((value) => setState(() {
           _myDataList = value;
         }));
-    super.initState();
   }
 
   @override
@@ -168,7 +176,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 40,
                 width: 40,
-                child: _myData.isEmpty
+                child: _myData['rankImage'] == null
                     ? const CircularProgressIndicator()
                     : Image.network(_myData['rankImage'], fit: BoxFit.cover),
               ),
@@ -229,17 +237,19 @@ class _HomePageState extends State<HomePage> {
         documentReference.update({
           'rank': rank,
           'rankImage': rankImage,
+        }).then((value) {
+          setState(() {
+            _myData['rank'] = rank;
+            _myData['rankImage'] = rankImage;
+          });
+        }).catchError((error) {
+          print('Error al actualizar los datos: $error');
         });
-        // .then((value) {
-        //   print('Datos actualizados correctamente.');
-        // }).catchError((error) {
-        //   print('Error al actualizar los datos: $error');
-        // });
       }
     }
   }
 
-  void getAppRank() async {
+  Future getAppRank() async {
     User? user = FirebaseAuth.instance.currentUser;
     final querySnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -260,12 +270,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void updateRankApp() async {
+  Future updateRankApp() async {
     User? user = FirebaseAuth.instance.currentUser;
     final querySnapshot = await FirebaseFirestore.instance
         .collection('rankSystem')
         .doc(user!.email)
         .get();
+    if (querySnapshot.data() == null) {
+      final value = await getRankNumber();
+      print('Valor de value: $value');
+      await setRankApp(value);
+      return value;
+    }
     if (querySnapshot['evaluation'].length > 9) {
       List<dynamic> evaluationList = querySnapshot['evaluation']
           .sublist(querySnapshot['evaluation'].length - 10);

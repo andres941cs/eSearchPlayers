@@ -211,6 +211,11 @@ class _MyPlayerListState extends State<MyPlayerList> {
         //No hay jugadores suficientes para crear un equipo
         searching = false;
       }
+      isTeamCreated().then((value) {
+        if (value != null) {
+          showTeamCreated(value);
+        }
+      });
     }
     myTeam.clear();
     for (int i = 0; i < querySnapshot!.docs.length; i++) {
