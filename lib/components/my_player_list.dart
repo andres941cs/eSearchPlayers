@@ -214,6 +214,8 @@ class _MyPlayerListState extends State<MyPlayerList> {
       isTeamCreated().then((value) {
         if (value != null) {
           showTeamCreated(value);
+          searching = false;
+          print('Sigue en el while');
           return;
         }
       });
