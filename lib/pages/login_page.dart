@@ -18,22 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   final ageController = TextEditingController();
   final tagController = TextEditingController();
 
-  // void loginUser() async {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return const Center(child: CircularProgressIndicator());
-  //     },
-  //   );
-  //   try {
-  //     await FirebaseAuth.instance.signInWithEmailAndPassword(
-  //         email: emailController.text, password: passwordController.text);
-  //     Navigator.pop(context);
-  //   } on FirebaseAuthException catch (e) {
-  //     Navigator.pop(context);
-  //     showErrorMessage(e.message.toString());
-  //   }
-  // }
   void loginUser() async {
     showDialog(
       context: context,

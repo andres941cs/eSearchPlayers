@@ -3,13 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
-//
-Future getUserProfile() async {
-  final user = FirebaseAuth.instance.currentUser;
-  final querySnapshot = await db.collection('users').doc(user!.uid).get();
-  final data = querySnapshot.data();
-}
-
 //Edita el perfil del usuario
 void editUserProfile({
   required String username,

@@ -193,7 +193,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
     bool searching = true;
     QuerySnapshot? querySnapshot;
     while (searching) {
-      await Future.delayed(const Duration(seconds: 8));
+      await Future.delayed(const Duration(seconds: 5));
       db = FirebaseFirestore.instance;
       querySnapshot = await db
           .collection('users')

@@ -278,7 +278,6 @@ class _HomePageState extends State<HomePage> {
         .get();
     if (querySnapshot.data() == null) {
       final value = await getRankNumber();
-      print('Valor de value: $value');
       await setRankApp(value);
       return value;
     }

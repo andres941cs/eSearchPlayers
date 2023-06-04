@@ -19,13 +19,32 @@ class _RegisterPageState extends State<RegisterPage> {
   final confirmPasswordController = TextEditingController();
   final tagController = TextEditingController();
 
+  // void registerUser() async {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Center(child: CircularProgressIndicator());
+  //     },
+  //   );
+  //   try {
+  //     if (passwordController.text == confirmPasswordController.text) {
+  //       UserCredential userCredential = await FirebaseAuth.instance
+  //           .createUserWithEmailAndPassword(
+  //               email: emailController.text, password: passwordController.text);
+  //       await addUserDetails(userCredential.user!.uid, usernameController.text,
+  //           tagController.text);
+  //       Navigator.pop(context);
+  //     } else {
+  //       Navigator.pop(context);
+  //       showErrorMessage("Passwords do not match");
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     Navigator.pop(context);
+  //     showErrorMessage(e.code);
+  //   }
+  // }
+
   void registerUser() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
     try {
       if (passwordController.text == confirmPasswordController.text) {
         UserCredential userCredential = await FirebaseAuth.instance
@@ -36,10 +55,10 @@ class _RegisterPageState extends State<RegisterPage> {
       } else {
         showErrorMessage("Passwords do not match");
       }
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
       showErrorMessage(e.code);
+    } catch (e) {
+      showErrorMessage("An error occurred. Please try again.");
     }
   }
 
