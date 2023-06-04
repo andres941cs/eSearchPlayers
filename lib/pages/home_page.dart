@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
               child: Card(
                 color: Theme.of(context).primaryColor, //Colors.red
                 child: _myDataList == null
-                    ? const CircularProgressIndicator()
+                    ? const Center(child: CircularProgressIndicator())
                     : SingleChildScrollView(
                         child: DataTable(
                           columns: [
