@@ -102,7 +102,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
           subtitle: Text(
               'Tag:  ${myTeam.length > 1 ? myTeam[1].tag : 'Loading...'}',
               style: GoogleFonts.getFont('Mukta', color: Colors.white)),
-          trailing: myTeam.isNotEmpty ? myMenu(myTeam[1]) : _icon,
+          trailing: myTeam.length > 1 ? myMenu(myTeam[1]) : _icon,
         ),
       ),
       Card(
@@ -119,7 +119,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
               subtitle: Text(
                   'Tag:  ${myTeam.length > 2 ? myTeam[2].tag : 'Loading...'}',
                   style: GoogleFonts.getFont('Mukta', color: Colors.white)),
-              trailing: myTeam.isNotEmpty ? myMenu(myTeam[2]) : _icon)),
+              trailing: myTeam.length > 2 ? myMenu(myTeam[2]) : _icon)),
       Card(
           color: Theme.of(context).primaryColor,
           child: ListTile(
@@ -131,7 +131,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
               subtitle: Text(
                   'Tag:  ${myTeam.length > 3 ? myTeam[3].tag : 'Loading...'}',
                   style: GoogleFonts.getFont('Mukta', color: Colors.white)),
-              trailing: myTeam.isNotEmpty ? myMenu(myTeam[3]) : _icon)),
+              trailing: myTeam.length > 3 ? myMenu(myTeam[3]) : _icon)),
       ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).primaryColor, // background
@@ -214,6 +214,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
       isTeamCreated().then((value) {
         if (value != null) {
           showTeamCreated(value);
+          return;
         }
       });
     }
