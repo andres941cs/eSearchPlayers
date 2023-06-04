@@ -144,7 +144,6 @@ class _MyPlayerListState extends State<MyPlayerList> {
               );
             });
             _loadData();
-            //getUserProfile();
           },
           child: Text(_nameButton))
     ]);
@@ -157,10 +156,8 @@ class _MyPlayerListState extends State<MyPlayerList> {
         switch (result) {
           case 'send_message':
             String id = '';
-            print(player.email);
             getUserID(player.email).then((value) {
               id = value;
-              print(id);
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -199,7 +196,7 @@ class _MyPlayerListState extends State<MyPlayerList> {
     bool searching = true;
     QuerySnapshot? querySnapshot;
     while (searching) {
-      await Future.delayed(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 6));
       db = FirebaseFirestore.instance;
       querySnapshot = await db
           .collection('users')
@@ -214,19 +211,19 @@ class _MyPlayerListState extends State<MyPlayerList> {
         return;
       }
       if (querySnapshot.docs.length >= 4) {
-        //No hay jugadores suficientes para crear un equipo
         searching = false;
       }
-      isTeamCreated().then((value) {
-        if (value != null) {
-          showTeamCreated(value);
-          searching = false;
-          print('Sigue en el while');
-          return;
-        }
-      });
+      List<dynamic>? comprobar = await isTeamCreated();
+      if (comprobar != null) {
+        showTeamCreated(comprobar);
+        searching = false;
+        print('Sigue en el while');
+        return;
+      }
     }
     myTeam.clear();
+//Comprobacion seguridad
+
     for (int i = 0; i < querySnapshot!.docs.length; i++) {
       var data = querySnapshot.docs[i].data();
       if (data is Map<String, dynamic>) {

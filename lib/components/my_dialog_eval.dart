@@ -86,7 +86,7 @@ class _EvaluateDialogState extends State<EvaluateDialog> {
         FirebaseFirestore.instance.collection('rankSystem').doc(email);
     List<dynamic> evaluation = [];
     await documentReference.get().then((value) {
-      evaluation = value!['evaluation'];
+      evaluation = value['evaluation'];
       evaluation.add(selectedValue);
     });
     documentReference.set({
