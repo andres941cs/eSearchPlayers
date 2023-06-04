@@ -84,9 +84,14 @@ class _EvaluateDialogState extends State<EvaluateDialog> {
   void _sendEvaluation(String email) async {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection('rankSystem').doc(email);
+    List<dynamic> evaluation = [];
+    await documentReference.get().then((value) {
+      evaluation = value!['evaluation'];
+      evaluation.add(selectedValue);
+    });
     documentReference.set({
       'email': email,
-      'evaluation': FieldValue.arrayUnion([selectedValue]),
+      'evaluation': evaluation,
     });
   }
 }

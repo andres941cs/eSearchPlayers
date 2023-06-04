@@ -157,13 +157,19 @@ class _MyPlayerListState extends State<MyPlayerList> {
         switch (result) {
           case 'send_message':
             String id = '';
-            getUserID(player.email).then((value) => id = value);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ChatPage(
-                          friendId: id,
-                        ))); //
+            print(player.email);
+            getUserID(player.email).then((value) {
+              id = value;
+              print(id);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChatPage(
+                            friendId: id,
+                          )));
+            });
+
+            //
             break;
           case 'evaluate_player':
             showDialog(
